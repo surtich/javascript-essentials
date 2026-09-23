@@ -17,3 +17,29 @@ export function negate(x: boolean) {
 export function len(xs: string) {
   return xs.length;
 }
+
+export function isEven(x: number) {
+  return x % 2 === 0;
+}
+
+export function isPalindrome(word: string) {
+  let i = 0;
+  let j = word.length - 1;
+  while (i < j) {
+    while (i < j && word[i] == " ") {
+      i++;
+    }
+    while (j > i && word[j] == " ") {
+      j--;
+    }
+
+    if (word[i] != word[j]) {
+      return false;
+    }
+
+    i++;
+    j--;
+  }
+
+  return true;
+}
