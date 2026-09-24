@@ -43,3 +43,13 @@ export function isPalindrome(word: string) {
 
   return true;
 }
+
+export function add(x: number, y: number): number;
+export function add(x: string, y: string): string;
+export function add(x: any, y: any) {
+  return x + y;
+}
+
+export function unshift<X>(xs: X[], x: X): X[] {
+  return [x, ...xs];
+}
