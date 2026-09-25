@@ -1,0 +1,1 @@
+// implementar las funciones some, every y find (que son funciones nativas de array)
