@@ -4,31 +4,36 @@ import { reduce } from "./reduce.ts";
 
 describe("reduce", () => {
   it("suma los elementos del array", () => {
-    expect(reduce([3, 4, 1, 2], 0, (acc, x) => acc + x)).toBe(10);
+    expect(reduce((acc: number, x: number) => acc + x, 0, [3, 4, 1, 2])).toBe(
+      10,
+    );
   });
 
   it("aplica unshift en cada paso para invertir la lista", () => {
     expect(
-      reduce([3, 4, 1, 2], [] as number[], (acc, x) => unshift(acc, x)),
+      reduce(
+        (acc: number[], x: number) => unshift(acc, x),
+        [] as number[],
+        [3, 4, 1, 2],
+      ),
     ).toEqual([2, 1, 4, 3]);
   });
 
   it("map se puede implementar con reduce", () => {
-    function map<X, Y>(xs: X[], f: (x: X) => Y): Y[] {
-      return reduce<X, Y[]>(xs as X[], [] as Y[], (acc: Y[], x: X) => [...acc, f(x)]);
+    function map<X, Y>(f: (x: X) => Y, xs: X[]): Y[] {
+      return reduce((acc: Y[], x: X) => [...acc, f(x)], [] as Y[], xs as X[]);
     }
-    expect(map([1, 2, 3], double)).toEqual([2, 4, 6]);
-    expect(map([], double)).toEqual([]);
+    expect(map(double, [1, 2, 3])).toEqual([2, 4, 6]);
+    expect(map(double, [])).toEqual([]);
   });
 
   it("filter se puede implementar con reduce", () => {
-    function filter<X>(xs: X[], f: (x: X) => boolean): X[] {
-      return reduce(xs, [] as X[], (acc, x) => (f(x) ? [...acc, x] : acc));
+    function filter<X>(f: (x: X) => boolean, xs: X[]): X[] {
+      return reduce((acc: X[], x: X) => (f(x) ? [...acc, x] : acc), [], xs);
     }
-    expect(filter(["level", "hello", "abba", "world"], isPalindrome)).toEqual([
+    expect(filter(isPalindrome, ["level", "hello", "abba", "world"])).toEqual([
       "level",
       "abba",
     ]);
-
   });
 });

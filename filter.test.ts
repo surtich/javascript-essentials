@@ -4,14 +4,14 @@ import { isEven, isPalindrome } from "./functions";
 import { reduce } from "./reduce";
 
 test("filtra los números pares", function () {
-  expect(filter([1, 2, 3, 4, 5, 6], isEven)).toEqual([2, 4, 6]);
+  expect(filter(isEven, [1, 2, 3, 4, 5, 6])).toEqual([2, 4, 6]);
 });
 
 test("filtra los palíndromos", function () {
-  expect(filter(["level", "hello", "abba", "world"], isPalindrome)).toEqual([
+  expect(filter(isPalindrome, ["level", "hello", "abba", "world"])).toEqual([
     "level",
     "abba",
   ]);
 
-  expect(filter([], isPalindrome)).toEqual([]);
+  expect(filter(isPalindrome, [])).toEqual([]);
 });

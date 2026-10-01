@@ -1,6 +1,9 @@
 import { expect, test } from "vitest";
 import { compose, mcompose, mflip, mpipe, pipe, pipe2, pipe3 } from "./compose";
 import { mcurry } from "./curry";
+import { filter } from "./filter";
+import { map } from "./map";
+import { reduce } from "./reduce";
 
 test("pasa los valores de izquierda a derecha", function () {
   expect(
@@ -76,4 +79,16 @@ test("puedo componer funciones que reciban más de un parámetro", function () {
   });
 
   expect(mpipe(add(1), product(2), add(3))(4)).toBe(13);
+});
+
+test("puedo componer map, filter y reduce", function () {
+  expect(
+    mpipe(
+      // @ts-ignore 
+      map((x: number) => x + 1),
+      filter((x: number) => x > 2),
+      reduce((acc: number, x: number) => acc + x, 0),
+      // @ts-ignore
+    )([1, 2, 3]),
+  ).toBe(7);
 });
