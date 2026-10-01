@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { compose, mpipe, pipe, pipe2, pipe3 } from "./compose";
+import { compose, mcompose, mflip, mpipe, pipe, pipe2, pipe3 } from "./compose";
 
 test("pipes values from left to right", function () {
   expect(
@@ -41,4 +41,26 @@ test("mpipe composes multiple stages from left to right", function () {
   );
 
   expect(result("pepe")).toBe("length=10");
+});
+
+test("mcompose composes multiple stages from right to left", function () {
+  const length = (value: string) => value.length;
+  const increment = (value: number) => value + 1;
+  const double = (value: number) => value * 2;
+  const format = (value: number) => `length=${value}`;
+  const result: (value: string) => string = mcompose(
+    format,
+    double,
+    increment,
+    length,
+  );
+
+  expect(result("pepe")).toBe("length=10");
+});
+
+test("mflip reverses the arguments passed to a function", function () {
+  const calculate = (a: number, b: number, c: number) => a * b - c;
+
+  expect(calculate(3, 2, 1)).toBe(5);
+  expect(mflip(calculate)(1, 2, 3)).toBe(5);
 });

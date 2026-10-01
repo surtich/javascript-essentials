@@ -35,6 +35,17 @@ type ValidPipeline<Functions extends readonly UnaryFunction[]> =
       : never
     : unknown;
 
+type ValidComposition<Functions extends readonly UnaryFunction[]> =
+  Functions extends readonly [
+    infer First extends UnaryFunction,
+    infer Second extends UnaryFunction,
+    ...infer Rest extends UnaryFunction[],
+  ]
+    ? ReturnType<Second> extends Parameters<First>[0]
+      ? ValidComposition<readonly [Second, ...Rest]>
+      : never
+    : unknown;
+
 type LastFunction<Functions extends readonly UnaryFunction[]> =
   Functions extends readonly [
     ...UnaryFunction[],
@@ -43,39 +54,43 @@ type LastFunction<Functions extends readonly UnaryFunction[]> =
     ? Last
     : never;
 
-export function mpipe<
-  Functions extends readonly [UnaryFunction, ...UnaryFunction[]],
->(
+type MPipe = <Functions extends readonly [UnaryFunction, ...UnaryFunction[]]>(
   ...fs: Functions & ValidPipeline<Functions>
-): (value: Parameters<Functions[0]>[0]) => ReturnType<LastFunction<Functions>> {
-  
-  type X = Parameters<Functions[0]>[0];
-  
-  return function (x: X) {
+) => (
+  value: Parameters<Functions[0]>[0],
+) => ReturnType<LastFunction<Functions>>;
+
+export const mpipe: MPipe = function (...fs) {
+  return function (x) {
     let result = x;
     for (const fn of fs) {
       result = fn(result);
     }
     return result;
   };
-}
+};
 
-// implemetar mflip
-// implementar mcompose con mflip
+type Reverse<Arguments extends readonly unknown[]> =
+  Arguments extends readonly [infer First, ...infer Rest]
+    ? [...Reverse<Rest>, First]
+    : [];
 
+type MFlip = <FunctionType extends (...args: any[]) => any>(
+  f: FunctionType,
+) => (...args: Reverse<Parameters<FunctionType>>) => ReturnType<FunctionType>;
 
-// CURRIFICACIÓN
+export const mflip: MFlip = function (f) {
+  return function (...args) {
+    return f(...args.reverse());
+  };
+};
 
-// COMPOSICIÓN OO
+type MCompose = <
+  Functions extends readonly [UnaryFunction, ...UnaryFunction[]],
+>(
+  ...fs: Functions & ValidComposition<Functions>
+) => (
+  value: Parameters<LastFunction<Functions>>[0],
+) => ReturnType<Functions[0]>;
 
-[1,2,3].map(x => x * 2).filter(x => x>2).reduce((acc, x) => acc+x, 0)
-
-// COMPOSICIÓN FUNCIONAL
-
-mpipe(
-  map((x) => x * 2),
-  filter((x) => x > 2),
-  reduce((acc, x) => acc + x, 0),
-)([(1, 2, 3)]);
-
-
+export const mcompose: MCompose = mflip(mpipe) as MCompose;

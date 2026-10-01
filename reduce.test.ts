@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { double, unshift } from "./functions.ts";
+import { double, isPalindrome, unshift } from "./functions.ts";
 import { reduce } from "./reduce.ts";
 
 describe("reduce", () => {
@@ -22,6 +22,13 @@ describe("reduce", () => {
   });
 
   it("filter se puede implementar con reduce", () => {
-    //ejercicio
+    function filter<X>(xs: X[], f: (x: X) => boolean): X[] {
+      return reduce(xs, [] as X[], (acc, x) => (f(x) ? [...acc, x] : acc));
+    }
+    expect(filter(["level", "hello", "abba", "world"], isPalindrome)).toEqual([
+      "level",
+      "abba",
+    ]);
+
   });
 });

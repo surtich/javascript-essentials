@@ -7,10 +7,10 @@ export function map<X, Y>(xs: X[], f: (x: X) => Y): Y[] {
 }
 
 // COMPOSICIÓN FUNCIONAL
-
+/*
 mpipe(
   map((x) => x * 2),
   filter((x) => x > 2),
   reduce((acc, x) => acc + x, 0),
 )([(1, 2, 3)]);
-
+*/

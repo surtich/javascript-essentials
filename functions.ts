@@ -16,7 +16,7 @@ curry(product)(3)(4);
 
 const curryProduct = curry(product);
 
-const double = curryProduct(2);
+export const double = curryProduct(2);
 const triple = curryProduct(3);
 
 double(8);
@@ -38,7 +38,6 @@ function kk(x, y, z, a, b, c) {
 function mcurry(f) {
   ?????
 }
-
 
 // EJEMPLO DE USO
 

@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { double, head, inc, len, negate } from "./functions";
+import { double, head, len, negate } from "./functions";
 import { map } from "./map";
 
 test("applies double to every number", function() {
@@ -7,7 +7,7 @@ test("applies double to every number", function() {
 });
 
 test("applies inc to every number", function() {
-	expect(map([1, 2, 3], inc)).toEqual([2, 3, 4]);
+	expect(map([1, 2, 3], x => x + 1)).toEqual([2, 3, 4]);
 });
 
 test("applies head to every string", function() {

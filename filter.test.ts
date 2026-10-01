@@ -16,14 +16,3 @@ test("filters palindromes", function () {
   expect(filter([], isPalindrome)).toEqual([]);
 });
 
-
-test("implementar filter con reduce", function() {
-  function filter<X>(xs: X[], f: (x: X) => boolean): X[] {
-    return reduce(xs, [] as X[], (acc, x) => f(x) ? [...acc, x] : acc)
-  }
-  expect(filter(["level", "hello", "abba", "world"], isPalindrome)).toEqual([
-    "level",
-    "abba",
-  ]);
-
-})
