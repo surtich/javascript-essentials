@@ -3,11 +3,11 @@ import { filter } from "./filter";
 import { isEven, isPalindrome } from "./functions";
 import { reduce } from "./reduce";
 
-test("filters even numbers", function () {
+test("filtra los números pares", function () {
   expect(filter([1, 2, 3, 4, 5, 6], isEven)).toEqual([2, 4, 6]);
 });
 
-test("filters palindromes", function () {
+test("filtra los palíndromos", function () {
   expect(filter(["level", "hello", "abba", "world"], isPalindrome)).toEqual([
     "level",
     "abba",
@@ -15,4 +15,3 @@ test("filters palindromes", function () {
 
   expect(filter([], isPalindrome)).toEqual([]);
 });
-

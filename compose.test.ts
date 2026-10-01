@@ -1,7 +1,8 @@
 import { expect, test } from "vitest";
 import { compose, mcompose, mflip, mpipe, pipe, pipe2, pipe3 } from "./compose";
+import { mcurry } from "./curry";
 
-test("pipes values from left to right", function () {
+test("pasa los valores de izquierda a derecha", function () {
   expect(
     pipe(
       (x: number) => x * 2,
@@ -10,7 +11,7 @@ test("pipes values from left to right", function () {
   ).toBe(7);
 });
 
-test("composes functions from right to left", function () {
+test("compone funciones de derecha a izquierda", function () {
   expect(
     compose(
       (x: number) => x * 2,
@@ -19,7 +20,7 @@ test("composes functions from right to left", function () {
   ).toBe(8);
 });
 
-test("pipe variants produce the same result", function () {
+test("las variantes de pipe producen el mismo resultado", function () {
   const length = (value: string) => value.length;
   const double = (value: number) => value * 2;
 
@@ -28,7 +29,7 @@ test("pipe variants produce the same result", function () {
   expect(pipe3(length, double)("pepe")).toBe(8);
 });
 
-test("mpipe composes multiple stages from left to right", function () {
+test("mpipe compone varias etapas de izquierda a derecha", function () {
   const length = (value: string) => value.length;
   const increment = (value: number) => value + 1;
   const double = (value: number) => value * 2;
@@ -43,7 +44,7 @@ test("mpipe composes multiple stages from left to right", function () {
   expect(result("pepe")).toBe("length=10");
 });
 
-test("mcompose composes multiple stages from right to left", function () {
+test("mcompose compone varias etapas de derecha a izquierda", function () {
   const length = (value: string) => value.length;
   const increment = (value: number) => value + 1;
   const double = (value: number) => value * 2;
@@ -58,9 +59,21 @@ test("mcompose composes multiple stages from right to left", function () {
   expect(result("pepe")).toBe("length=10");
 });
 
-test("mflip reverses the arguments passed to a function", function () {
+test("mflip invierte los argumentos pasados a una función", function () {
   const calculate = (a: number, b: number, c: number) => a * b - c;
 
   expect(calculate(3, 2, 1)).toBe(5);
   expect(mflip(calculate)(1, 2, 3)).toBe(5);
+});
+
+test("puedo componer funciones que reciban más de un parámetro", function () {
+  const add = mcurry(function (x, y) {
+    return x + y;
+  });
+
+  const product = mcurry(function (x, y) {
+    return x * y;
+  });
+
+  expect(mpipe(add(1), product(2), add(3))(4)).toBe(13);
 });

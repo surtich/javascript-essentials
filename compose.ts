@@ -63,8 +63,8 @@ type MPipe = <Functions extends readonly [UnaryFunction, ...UnaryFunction[]]>(
 export const mpipe: MPipe = function (...fs) {
   return function (x) {
     let result = x;
-    for (const fn of fs) {
-      result = fn(result);
+    for (const f of fs) {
+      result = f(result);
     }
     return result;
   };
