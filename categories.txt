@@ -1,0 +1,17 @@
+
+
+apply: (a -> b) -> a -> b
+
+map: (a -> b) -> f a -> f b
+
+flatMap: (a -> m b) -> m a -> m b
+
+compose: (b -> c) -> (a -> b) -> a -> c
+
+function apply(f, x) {
+    return f(x);
+}
+
+
+[] = caja
+a -> caja
