@@ -76,3 +76,7 @@ console.log(person1.isAdult());
 console.log(person2.isAdult());
 person2.setAge(99);
 console.log(person2.getAge());
+
+console.log(person2 instanceof createPerson);
+
+console.log(person1.greet == person2.greet);
