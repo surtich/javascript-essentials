@@ -28,9 +28,11 @@ test("mcurry acepta argumentos en varias llamadas", function () {
   expect(mcurry(sum)(1, 2)(3)).toBe(6);
 });
 
-test("mcurry ignora las llamadas vacías al recopilar argumentos", function () {
+test.only("mcurry ignora las llamadas vacías al recopilar argumentos", function () {
   const sum = (x: number, y: number, z: number) => x + y + z;
 
+  expect(mcurry(sum)(1, 2, 3)).toBe(6);
+  expect(mcurry(sum)(1, 2)(3)).toBe(6);
   expect(mcurry(sum)(1)()()(2)(3)).toBe(6);
 });
 
@@ -41,4 +43,3 @@ test("mcurry conserva los tipos de argumentos mixtos", function () {
   expect(mcurry(describeBook)(3, "Dune")(true)).toBe("3 Dune: available");
   expect(mcurry(describeBook)(3)("Dune", false)).toBe("3 Dune: unavailable");
 });
-

@@ -4,6 +4,13 @@
     "test": "vitest"
   },
   "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.5",
     "vitest": "^5.0.1"
+  },
+  "dependencies": {
+    "buffer": "^6.0.3",
+    "express": "^5.3.0",
+    "http": "^0.0.1-security"
   }
 }
