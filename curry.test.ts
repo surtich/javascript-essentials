@@ -28,7 +28,7 @@ test("mcurry acepta argumentos en varias llamadas", function () {
   expect(mcurry(sum)(1, 2)(3)).toBe(6);
 });
 
-test.only("mcurry ignora las llamadas vacías al recopilar argumentos", function () {
+test("mcurry ignora las llamadas vacías al recopilar argumentos", function () {
   const sum = (x: number, y: number, z: number) => x + y + z;
 
   expect(mcurry(sum)(1, 2, 3)).toBe(6);

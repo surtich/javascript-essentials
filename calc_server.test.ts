@@ -6,6 +6,7 @@ let server: ReturnType<typeof app.listen> | null = null;
 
 beforeAll(async () => {
   await new Promise<void>((resolve) => {
+    //@ts-ignore
     server = app.listen(0, resolve);
   });
   if (!server) {
