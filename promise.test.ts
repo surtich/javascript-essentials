@@ -52,10 +52,26 @@ import {
   promiseMultiply,
 } from "./promise.ts";
 
+async function sum(xs: number[]): Promise<number> {
+  let result = 0;
+
+  for (const x of xs) {
+    result = await promiseAdd(result, x);
+  }
+
+  return result;
+}
+
 test("encadena sumas asíncronas", async () => {
-  await expect(
-    promiseAdd(4, 5).then(promiseAdd(7)).then(promiseAdd(2)),
-  ).resolves.toBe(18);
+  vi.useFakeTimers();
+  try {
+    const result = promiseAdd(4, 5).then(promiseAdd(7)).then(promiseAdd(2));
+    const expectation = expect(result).resolves.toBe(18);
+    await vi.runAllTimersAsync();
+    await expectation;
+  } finally {
+    vi.useRealTimers();
+  }
 });
 
 test("multiplica números con promiseMultiply", async () => {
@@ -88,4 +104,42 @@ test("propaga el error de la petición como rechazo", async () => {
   const result = promiseAdd(4, 5).then(promiseAdd({})).then(promiseAdd(2));
 
   await expect(result).rejects.toThrow("Error HTTP: 400 Bad Request");
+});
+
+test("sum suma los elementos de un array secuencialmente", async () => {
+  vi.useFakeTimers();
+  try {
+    const result = sum([1, 2, 3]);
+    await vi.runAllTimersAsync();
+    await expect(result).resolves.toBe(6);
+  } finally {
+    vi.useRealTimers();
+  }
+});
+
+test("sum rechaza el resultado cuando una suma falla", async () => {
+  vi.useFakeTimers();
+  try {
+    // @ts-expect-error Se comprueba el rechazo ante un elemento inválido.
+    const result = sum([1, {}, 3]);
+    const rejection = expect(result).rejects.toThrow(
+      "Error HTTP: 400 Bad Request",
+    );
+    await vi.runAllTimersAsync();
+    await rejection;
+  } finally {
+    vi.useRealTimers();
+  }
+});
+
+test("sum permite gestionar errores con catch", async () => {
+  vi.useFakeTimers();
+  try {
+    // @ts-expect-error Se comprueba el rechazo ante un elemento inválido.
+    const result = sum([1, {}, 3]).catch(() => "Capturado error");
+    await vi.runAllTimersAsync();
+    await expect(result).resolves.toBe("Capturado error");
+  } finally {
+    vi.useRealTimers();
+  }
 });

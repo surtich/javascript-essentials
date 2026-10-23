@@ -1,7 +1,7 @@
 import { mcurry } from "./curry.ts";
 import { peticionHttp } from "./utils.ts";
 
-export const promiseAdd = mcurry(function (
+export const promiseAdd = mcurry(async function (
   x: number,
   y: number,
 ): Promise<number> {
