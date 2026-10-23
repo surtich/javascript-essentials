@@ -2,7 +2,7 @@ import { flip, mflip } from "./compose.ts";
 import { mcurry } from "./curry.ts";
 import { peticionHttp } from "./utils.ts";
 
-export function asyncAdd(
+export const asyncAdd = mcurry(function (
   x: number,
   y: number,
   continuation: (resultado: number) => void,
@@ -18,7 +18,7 @@ export function asyncAdd(
       );
     },
   );
-}
+});
 
 export function asyncConcat(
   x: string,
