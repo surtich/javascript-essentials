@@ -13,8 +13,15 @@ function readNumber(value: unknown): number | undefined {
   return Number.isFinite(number) ? number : undefined;
 }
 
-function sendInvalidParameters(response: express.Response) {
-  response.status(400).json({ error: "Parámetros numéricos inválidos" });
+function readString(value: unknown): string | undefined {
+  return typeof value === "string" ? value : undefined;
+}
+
+function sendInvalidParameters(
+  response: express.Response,
+  message = "Parámetros numéricos inválidos",
+) {
+  response.status(400).json({ error: message });
 }
 
 app.get("/add", (request, response) => {
@@ -22,6 +29,17 @@ app.get("/add", (request, response) => {
   const b = readNumber(request.query.b);
   if (a === undefined || b === undefined) {
     sendInvalidParameters(response);
+    return;
+  }
+
+  response.json({ result: a + b });
+});
+
+app.get("/concat", (request, response) => {
+  const a = readString(request.query.a);
+  const b = readString(request.query.b);
+  if (a === undefined || b === undefined) {
+    sendInvalidParameters(response, "Parámetros de texto inválidos");
     return;
   }
 

@@ -20,6 +20,41 @@ export function asyncAdd(
   );
 }
 
+export function asyncConcat(
+  x: string,
+  y: string,
+  continuation: (resultado: string) => void,
+) {
+  peticionHttp(
+    `http://localhost:3000/concat?a=${x}&b=${y}`,
+    function (err, result) {
+      setTimeout(
+        function () {
+          continuation(result.result);
+        },
+        100 + 300 * Math.random(),
+      );
+    },
+  );
+}
+
+export function asyncIsEven(
+  x: number,
+  continuation: (resultado: boolean) => void,
+) {
+  peticionHttp(
+    `http://localhost:3000/isEven?value=${x}`,
+    function (err, result) {
+      setTimeout(
+        function () {
+          continuation(result.result);
+        },
+        100 + 300 * Math.random(),
+      );
+    },
+  );
+}
+
 export function asyncInc(x: number, continuation: (result: number) => void) {
   asyncAdd(1, x, continuation);
 }
@@ -146,5 +181,54 @@ export const asyncMap = mcurry(function <X, Y>(
   }
 });
 
-// implementar asyncFilter y asyncReduce
-// Probar la composición con asyncMap, asyncFilter y asyncReduce
+export const asyncFilter = mcurry(function <X>(
+  f: (x: X, fcont: (p: boolean) => void) => void,
+  xs: X[],
+  continuation: (ys: X[]) => void,
+): void {
+  const indexes: number[] = [];
+  let times = 0;
+  for (let i in xs) {
+    f(xs[i], function (result: boolean) {
+      if (result) {
+        indexes.push(parseInt(i, 10));
+      }
+      times++;
+      if (times == xs.length) {
+        continuation(indexes.sort((x, y) => x - y).map((index) => xs[index]));
+      }
+    });
+  }
+});
+
+export const asyncReduce = mcurry(function <X, R>(
+  f: (acc: R, x: X, fcont: (result: R) => void) => void,
+  init: R,
+  xs: X[],
+  continuation: (result: R) => void,
+): void {
+  if (xs.length === 0) {
+    continuation(init);
+  } else {
+    const [head, ...tail] = xs;
+    f(init, head, function (result: R) {
+      asyncReduce(f, result, tail, continuation);
+    });
+  }
+});
+
+export const asyncReduceRight = mcurry(function <X, R>(
+  f: (acc: R, x: X, fcont: (result: R) => void) => void,
+  init: R,
+  xs: X[],
+  continuation: (result: R) => void,
+): void {
+  if (xs.length === 0) {
+    continuation(init);
+  } else {
+    const [head, ...tail] = xs;
+    asyncReduceRight(f, init, tail, function (result: R) {
+      f(result, head, continuation);
+    });
+  }
+});

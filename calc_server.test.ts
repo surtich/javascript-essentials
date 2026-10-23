@@ -41,6 +41,10 @@ test("add suma dos números", async () => {
   expect(await getResult("/add?a=3&b=4")).toBe(7);
 });
 
+test("concat concatena dos cadenas", async () => {
+  expect(await getResult("/concat?a=hola&b=%20mundo")).toBe("hola mundo");
+});
+
 test("multiply multiplica dos números", async () => {
   expect(await getResult("/multiply?a=3&b=4")).toBe(12);
 });

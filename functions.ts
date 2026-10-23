@@ -52,6 +52,10 @@ export function add(x: any, y: any) {
   return x + y;
 }
 
+export function concat(x: string, y: string): string {
+  return x + y;
+}
+
 export function unshift<X>(xs: X[], x: X): X[] {
   return [x, ...xs];
 }

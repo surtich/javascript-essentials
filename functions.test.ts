@@ -1,5 +1,9 @@
 import { expect, test } from "vitest";
-import { isPalindrome } from "./functions";
+import { concat, isPalindrome } from "./functions";
+
+test("concatena dos cadenas", function () {
+  expect(concat("hola", " mundo")).toBe("hola mundo");
+});
 
 test("devuelve true para palíndromos", function () {
   expect(isPalindrome("level")).toBe(true);
